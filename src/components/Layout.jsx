@@ -67,7 +67,7 @@ export default function Layout({ page, setPage, children }) {
   );
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+    <Box sx={{ display: 'flex', height: '100vh', width: '100vw', bgcolor: 'background.default', overflow: 'hidden' }}>
       {isMobile && (
         <AppBar position="fixed" sx={{ bgcolor: 'background.paper', boxShadow: 'none', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <Toolbar>
@@ -100,7 +100,7 @@ export default function Layout({ page, setPage, children }) {
         )}
       </Box>
 
-      <Box component="main" sx={{ flex: 1, p: { xs: 2, md: 3 }, mt: { xs: 8, md: 0 }, overflow: 'auto' }}>
+      <Box component="main" sx={{ flex: 1, p: { xs: 2, md: 3 }, mt: { xs: 8, md: 0 }, overflow: 'auto', height: '100%' }}>
         {children}
       </Box>
     </Box>

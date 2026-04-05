@@ -108,6 +108,25 @@ export function FinanceProvider({ children }) {
   const netBalance     = totalIncome - totalBills - totalExpenses;
   const projectedNet   = totalProjected - totalBills - totalExpenses;
 
+  // ---- 6-month rollover (running surplus/deficit) ----
+  const now = new Date();
+  const monthlyRollover = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
+    const label = d.toLocaleString('default', { month: 'short', year: '2-digit' });
+    const monthExp = expenses
+      .filter(e => { const ed = new Date(e.date || e.createdAt); return ed.getMonth() === d.getMonth() && ed.getFullYear() === d.getFullYear(); })
+      .reduce((s, e) => s + Number(e.amount), 0);
+    const spent = monthExp + totalBills;
+    const surplus = totalIncome - spent;
+    return { month: label, Projected: totalIncome, Spent: spent, Surplus: surplus };
+  });
+  // Running balance starting from savings balance
+  let runningBal = savings.startingBalance;
+  const rolloverWithBalance = monthlyRollover.map(m => {
+    runningBal += m.Surplus + savings.monthly;
+    return { ...m, Balance: runningBal };
+  });
+
   return (
     <FinanceContext.Provider value={{
       incomes, addIncome, updateIncome, deleteIncome,
@@ -117,6 +136,7 @@ export function FinanceProvider({ children }) {
       savings, updateSavings,
       totalIncome, totalProjected, totalBills, totalExpenses,
       netBalance, projectedNet,
+      monthlyRollover, rolloverWithBalance,
       categories: DEFAULT_CATEGORIES,
     }}>
       {children}
