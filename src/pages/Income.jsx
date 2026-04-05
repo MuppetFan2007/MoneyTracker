@@ -4,6 +4,7 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions, IconButton,
   List, ListItem, ListItemText, Chip, Divider, MenuItem, Tooltip,
   InputAdornment, Avatar, ToggleButton, ToggleButtonGroup, Stack,
+  useTheme, useMediaQuery,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -66,6 +67,8 @@ function PaycheckDaysPicker({ frequency, paycheckDays, paycheckDayOfMonth, onCha
 }
 
 function IncomeForm({ open, onClose, onSave, initial, title }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [form, setForm] = useState(initial || EMPTY_FORM);
   React.useEffect(() => { setForm(initial || EMPTY_FORM); }, [initial, open]);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -74,7 +77,7 @@ function IncomeForm({ open, onClose, onSave, initial, title }) {
   const showDayPicker = ['Weekly', 'Bi-weekly', 'Monthly'].includes(form.frequency);
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth fullScreen={isMobile}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent sx={{ pt: 2 }}>
         <Grid container spacing={2}>

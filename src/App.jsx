@@ -18,8 +18,8 @@ const PAGES = { dashboard: Dashboard, transactions: Transactions, income: Income
 
 function AppInner() {
   const [page, setPage] = useState('dashboard');
-  const { mode } = useThemeMode();
-  const theme = useMemo(() => buildTheme(mode), [mode]);
+  const { themeId } = useThemeMode();
+  const theme = useMemo(() => buildTheme(themeId), [themeId]);
   const Page = PAGES[page] || Dashboard;
 
   return (

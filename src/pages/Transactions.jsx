@@ -4,6 +4,7 @@ import {
   List, ListItem, ListItemText, IconButton, Tooltip, TextField,
   MenuItem, Select, FormControl, InputLabel, Button, InputAdornment,
   Dialog, DialogTitle, DialogContent, DialogActions, alpha,
+  useTheme, useMediaQuery,
 } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
@@ -23,13 +24,15 @@ const fmt = v => new Intl.NumberFormat('en-US', { style: 'currency', currency: '
 const EMPTY_EXP = { description:'', amount:'', category:'Food', date: dayjs().format('YYYY-MM-DD'), payee:'', notes:'' };
 
 function AddExpenseDialog({ open, onClose, onSave, initial, categories }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [form, setForm] = useState(initial || EMPTY_EXP);
   React.useEffect(() => { setForm(initial || EMPTY_EXP); }, [initial, open]);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const valid = form.description && form.amount && Number(form.amount) > 0;
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth fullScreen={isMobile}>
       <DialogTitle>{initial ? 'Edit Transaction' : 'Add Expense'}</DialogTitle>
       <DialogContent sx={{ pt: 2 }}>
         <Grid container spacing={2}>
@@ -86,6 +89,8 @@ function dateLabel(dateStr) {
 }
 
 export default function Transactions() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { expenses, addExpense, updateExpense, deleteExpense, incomes, categories } = useFinance();
   const [search, setSearch]       = useState('');
   const [filterCat, setFilterCat] = useState('All');
@@ -190,14 +195,14 @@ export default function Transactions() {
                       <ListItem
                         disablePadding
                         sx={{
-                          px:2, py:1.25,
+                          px: { xs: 1.5, sm: 2 }, py: 1.25,
                           '&:hover .tx-actions': { opacity:1 },
                           '&:hover': { bgcolor: 'background.elevated' },
                           transition: 'background 0.15s',
-                          gap: 1.5,
+                          gap: { xs: 1, sm: 1.5 },
                         }}
                       >
-                        <Avatar sx={{ width:40, height:40, borderRadius:3, bgcolor: cfg.bg, fontSize:18, flexShrink:0 }}>
+                        <Avatar sx={{ width: { xs: 34, sm: 40 }, height: { xs: 34, sm: 40 }, borderRadius:3, bgcolor: cfg.bg, fontSize:18, flexShrink:0 }}>
                           {isIncome ? '💵' : cfg.emoji}
                         </Avatar>
                         <ListItemText
@@ -217,7 +222,7 @@ export default function Transactions() {
                             </Box>
                           }
                         />
-                        <Box className="tx-actions" sx={{ display:'flex', alignItems:'center', gap:0.5, opacity:0, transition:'opacity 0.15s', flexShrink:0 }}>
+                        <Box className="tx-actions" sx={{ display:'flex', alignItems:'center', gap:0.5, opacity: isMobile ? 1 : 0, transition:'opacity 0.15s', flexShrink:0 }}>
                           {!isIncome && (
                             <Tooltip title="Edit">
                               <IconButton size="small" onClick={() => setDialog({ editing: tx })}>

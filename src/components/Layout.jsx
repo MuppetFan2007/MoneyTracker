@@ -13,10 +13,10 @@ import SwapHorizRoundedIcon from '@mui/icons-material/SwapHorizRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import MenuOpenRoundedIcon from '@mui/icons-material/MenuOpenRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
 import { useThemeMode } from '../context/ThemeContext';
+import ThemePicker from './ThemePicker';
+import { THEME_META } from '../context/ThemeContext';
 
 const DRAWER_FULL = 250;
 const DRAWER_MINI = 72;
@@ -31,7 +31,7 @@ const NAV = [
 
 export default function Layout({ page, setPage, children }) {
   const muiTheme = useTheme();
-  const { mode, toggle } = useThemeMode();
+  const { mode, themeId } = useThemeMode();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('md'));
   const [mini, setMini]           = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -133,18 +133,18 @@ export default function Layout({ page, setPage, children }) {
       <Box sx={{ p: 1.5, display: 'flex', alignItems: 'center', gap: 1, justifyContent: mini ? 'center' : 'space-between' }}>
         {!mini && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Avatar sx={{ width: 30, height: 30, bgcolor: 'primary.main', fontSize: 13, fontWeight: 700 }}>M</Avatar>
+            <Avatar sx={{ width: 30, height: 30, bgcolor: 'primary.main', fontSize: 13, fontWeight: 700 }}>
+              {THEME_META[themeId]?.emoji || 'M'}
+            </Avatar>
             <Box>
-              <Typography variant="caption" fontWeight={600} display="block" sx={{ lineHeight: 1.2 }}>My Account</Typography>
-              <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>Local Storage</Typography>
+              <Typography variant="caption" fontWeight={600} display="block" sx={{ lineHeight: 1.2 }}>
+                {THEME_META[themeId]?.name || 'My Account'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.65rem' }}>Click palette to change</Typography>
             </Box>
           </Box>
         )}
-        <Tooltip title={dark ? 'Light mode' : 'Dark mode'} placement="right">
-          <IconButton size="small" onClick={toggle} sx={{ color: 'text.secondary' }}>
-            {dark ? <LightModeRoundedIcon sx={{ fontSize: 18 }} /> : <DarkModeRoundedIcon sx={{ fontSize: 18 }} />}
-          </IconButton>
-        </Tooltip>
+        <ThemePicker mini={mini} />
       </Box>
     </Box>
   );

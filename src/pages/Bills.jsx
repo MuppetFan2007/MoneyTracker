@@ -4,6 +4,7 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions, IconButton,
   List, ListItem, ListItemText, Chip, Divider, MenuItem, Tooltip,
   InputAdornment, Switch, FormControlLabel, Avatar, LinearProgress,
+  useTheme, useMediaQuery,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -21,13 +22,15 @@ const fmt = v => new Intl.NumberFormat('en-US', { style: 'currency', currency: '
 const EMPTY = { name: '', amount: '', frequency: 'Monthly', dueDay: '', category: 'Other', notes: '' };
 
 function BillForm({ open, onClose, onSave, initial }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [form, setForm] = useState(initial || EMPTY);
   React.useEffect(() => { setForm(initial || EMPTY); }, [initial, open]);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const valid = form.name && form.amount && Number(form.amount) > 0;
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth fullScreen={isMobile}>
       <DialogTitle>{initial ? 'Edit Bill' : 'Add Bill'}</DialogTitle>
       <DialogContent sx={{ pt: 2 }}>
         <Grid container spacing={2}>
@@ -179,16 +182,18 @@ export default function Bills() {
                             </Box>
                           }
                         />
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Typography variant="body1" fontWeight={700} color={bill.active ? 'warning.main' : 'text.disabled'}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 0.25 }}>
+                          <Typography variant="body2" fontWeight={700} color={bill.active ? 'warning.main' : 'text.disabled'}>
                             {fmt(bill.amount)}
                           </Typography>
-                          <Tooltip title="Edit">
-                            <IconButton size="small" onClick={() => setDialog({ editing: bill })}><EditIcon fontSize="small" /></IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete">
-                            <IconButton size="small" color="error" onClick={() => deleteBill(bill.id)}><DeleteIcon fontSize="small" /></IconButton>
-                          </Tooltip>
+                          <Box sx={{ display: 'flex' }}>
+                            <Tooltip title="Edit">
+                              <IconButton size="small" onClick={() => setDialog({ editing: bill })}><EditIcon fontSize="small" /></IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                              <IconButton size="small" color="error" onClick={() => deleteBill(bill.id)}><DeleteIcon fontSize="small" /></IconButton>
+                            </Tooltip>
+                          </Box>
                         </Box>
                       </ListItem>
                       {i < bills.length - 1 && <Divider sx={{ opacity: 0.1 }} />}
@@ -200,7 +205,7 @@ export default function Bills() {
           </Card>
         </Grid>
         <Grid item xs={12} md={5}>
-          <Card sx={{ height: 380 }}>
+          <Card sx={{ height: { xs: 280, md: 380 } }}>
             <CardContent sx={{ height: '100%' }}>
               <Typography variant="h6" gutterBottom>Bill Breakdown</Typography>
               {pieData.length > 0 ? (

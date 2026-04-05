@@ -101,9 +101,9 @@ export default function Charts() {
       <Grid container spacing={2.5}>
         {/* Trend chart */}
         <Grid item xs={12} md={8}>
-          <Card sx={{ height:380 }}>
+          <Card sx={{ height: { xs: 300, md: 380 } }}>
             <CardContent sx={{ height:'100%', display:'flex', flexDirection:'column', p:2.5,'&:last-child':{pb:2.5} }}>
-              <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'center', mb:2 }}>
+              <Box sx={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', flexWrap:'wrap', gap:1, mb:2 }}>
                 <Box>
                   <Typography variant="h6">Income vs Expenses</Typography>
                   <Typography variant="caption" color="text.secondary">Monthly comparison over time</Typography>
@@ -139,7 +139,7 @@ export default function Charts() {
 
         {/* Category donut */}
         <Grid item xs={12} md={4}>
-          <Card sx={{ height:380 }}>
+          <Card sx={{ height: { xs: 300, md: 380 } }}>
             <CardContent sx={{ height:'100%', display:'flex', flexDirection:'column', p:2.5,'&:last-child':{pb:2.5} }}>
               <Typography variant="h6" gutterBottom>Spending by Category</Typography>
               <Typography variant="caption" color="text.secondary" display="block" mb={1}>{fmt(totalCatSpend)} total</Typography>
@@ -210,7 +210,7 @@ export default function Charts() {
 
         {/* Savings growth */}
         <Grid item xs={12} md={8}>
-          <Card sx={{ height:320 }}>
+          <Card sx={{ height: { xs: 260, md: 320 } }}>
             <CardContent sx={{ height:'100%', display:'flex', flexDirection:'column', p:2.5,'&:last-child':{pb:2.5} }}>
               <Box sx={{ mb:1.5 }}>
                 <Typography variant="h6">Savings Projection</Typography>
@@ -243,7 +243,7 @@ export default function Charts() {
 
         {/* Overview bar */}
         <Grid item xs={12} md={6}>
-          <Card sx={{ height:300 }}>
+          <Card sx={{ height: { xs: 240, md: 300 } }}>
             <CardContent sx={{ height:'100%', display:'flex', flexDirection:'column', p:2.5,'&:last-child':{pb:2.5} }}>
               <Typography variant="h6" gutterBottom>Monthly Overview</Typography>
               <Box sx={{ flex:1 }}>
@@ -265,7 +265,7 @@ export default function Charts() {
 
         {/* Radar */}
         <Grid item xs={12} md={6}>
-          <Card sx={{ height:300 }}>
+          <Card sx={{ height: { xs: 240, md: 300 } }}>
             <CardContent sx={{ height:'100%', display:'flex', flexDirection:'column', p:2.5,'&:last-child':{pb:2.5} }}>
               <Typography variant="h6" gutterBottom>Spending Radar</Typography>
               {radarData.length < 3 ? (
